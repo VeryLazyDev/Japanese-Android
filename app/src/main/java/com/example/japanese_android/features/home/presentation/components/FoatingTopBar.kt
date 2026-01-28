@@ -1,4 +1,4 @@
-package com.example.japanese_android.presentation.components
+package com.example.japanese_android.features.home.presentation.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Row
