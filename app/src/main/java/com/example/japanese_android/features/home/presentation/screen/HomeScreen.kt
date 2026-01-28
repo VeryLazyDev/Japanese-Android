@@ -93,8 +93,8 @@ fun HomeScreen() {
                         HomePageModules.forEachIndexed { index, module ->
                             AnimatedVisibility(
                                 visibleState = visibleState,
-                                enter = fadeIn(animationSpec = tween(durationMillis = 2500, delayMillis = 300 * index)) +
-                                        scaleIn(initialScale = 0.8f, animationSpec = tween(durationMillis = 2500, delayMillis = 300 * index))
+                                enter = fadeIn(animationSpec = tween(durationMillis = 800, delayMillis = 120 * index)) +
+                                        scaleIn(initialScale = 0.95f, animationSpec = tween(durationMillis = 800, delayMillis = 140 * index))
                             ) {
                                 LearningModuleCard(
                                     title = module.title,
