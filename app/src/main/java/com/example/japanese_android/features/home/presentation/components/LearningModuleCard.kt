@@ -1,7 +1,9 @@
 package com.example.japanese_android.features.home.presentation.components
 
 import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
@@ -47,12 +49,13 @@ fun LearningModuleCard(
         onClick = onClick,
         modifier = Modifier
             .height(200.dp)
+//            .border(width = 1.dp, color = Color.White.copy(alpha = 0.5f))
             .padding(vertical = 5.dp),
         colors = CardDefaults.cardColors(
-            containerColor = Color.White
+            containerColor = Color(0xFFF5F5F5)
         ),
         elevation = CardDefaults.cardElevation(
-            defaultElevation = 1.dp
+            defaultElevation = 2.dp,
         ),
     ) {
         Column(
