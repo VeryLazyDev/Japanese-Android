@@ -1,5 +1,11 @@
 package com.example.japanese_android.features.home.presentation.screen
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.MutableTransitionState
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,6 +22,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -24,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import com.example.japanese_android.common.components.AppLogo
 import com.example.japanese_android.common.components.AppName
 import com.example.japanese_android.common.components.TextHeadLine
+import com.example.japanese_android.features.home.data.model.HomePageModules
 import com.example.japanese_android.features.home.presentation.components.FloatingTopBar
 import com.example.japanese_android.features.home.presentation.components.LearningModuleCard
 
@@ -32,6 +40,10 @@ import com.example.japanese_android.features.home.presentation.components.Learni
 @Composable
 fun HomeScreen() {
     val scrollState = rememberScrollState()
+
+    val visibleState = remember {
+        MutableTransitionState(false).apply { targetState = true }
+    }
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -40,85 +52,60 @@ fun HomeScreen() {
     ) {
         Column {
             FloatingTopBar(title = "MUDA-ZERO", onMenuClick = {})
-            Box(
-                modifier = Modifier
-                    .padding(top = 30.dp)
-                    .fillMaxSize(),
-                contentAlignment = Alignment.TopCenter
+            AnimatedVisibility(
+                visibleState = visibleState,
+                enter = fadeIn(animationSpec = tween(0)) +
+                        slideInVertically(initialOffsetY = {0})
             ) {
-                Column(
+                Box(
                     modifier = Modifier
-                        .padding(horizontal = 20.dp)
-                        .padding( bottom = 10.dp)
-                        .fillMaxSize()
-                        .verticalScroll(scrollState),
+                        .padding(top = 30.dp)
+                        .fillMaxSize(),
+                    contentAlignment = Alignment.TopCenter
                 ) {
-                    // WELCOME HEADER SECTION
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically
+                    Column(
+                        modifier = Modifier
+                            .padding(horizontal = 20.dp)
+                            .padding(bottom = 10.dp)
+                            .fillMaxSize()
+                            .verticalScroll(scrollState),
                     ) {
-                        TextHeadLine("Welcome to ")
-                        AppLogo()
-                        Spacer(modifier = Modifier.weight(.1f))
-                        AppName(style = MaterialTheme.typography.headlineSmall)
-                        Spacer(modifier = Modifier.weight(1f))
+                        // WELCOME HEADER SECTION
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            TextHeadLine("Welcome to ")
+                            AppLogo()
+                            Spacer(modifier = Modifier.weight(.1f))
+                            AppName(style = MaterialTheme.typography.headlineSmall)
+                            Spacer(modifier = Modifier.weight(1f))
+                        }
+                        Spacer(modifier = Modifier.height(10.dp))
+
+                        Text("Ready to Start your journey? Pick a module below to master your fluency.")
+
+                        Spacer(modifier = Modifier.height(40.dp))
+
+                        // LEARNING MODULES
+                        TextHeadLine("Learning Modules")
+                        Spacer(modifier = Modifier.height(10.dp))
+
+                        HomePageModules.forEachIndexed { index, module ->
+                            AnimatedVisibility(
+                                visibleState = visibleState,
+                                enter = fadeIn(animationSpec = tween(durationMillis = 2500, delayMillis = 300 * index)) +
+                                        scaleIn(initialScale = 0.8f, animationSpec = tween(durationMillis = 2500, delayMillis = 300 * index))
+                            ) {
+                                LearningModuleCard(
+                                    title = module.title,
+                                    desc = module.desc,
+                                    iconText = module.icon,
+                                    iconColor = module.color,
+                                    onClick = {}
+                                )
+                            }
+                        }
                     }
-                    Spacer(modifier = Modifier.height(10.dp))
-
-                    Text("Ready to Start your journey? Pick a module below to master your fluency.")
-
-                    Spacer(modifier = Modifier.height(40.dp))
-
-                    // LEARNING MODULES
-                    TextHeadLine("Learning Modules")
-                    Spacer(modifier = Modifier.height(10.dp))
-                    LearningModuleCard(
-                        onClick = {},
-                        title = "READING",
-                        desc = """
-                        Improve your reading
-                        comprehension with texts
-                        tailored for your level
-                        """,
-                        iconText = "読",
-                        iconColor = Color(0xFFA5F3FC)
-                    )
-
-                    LearningModuleCard(
-                        onClick = {},
-                        title = "KANJI",
-                        desc = """
-                        Learn, review and master 
-                        kanji meanings,
-                        readings, and usage
-                        """,
-                        iconText = "字",
-                        iconColor = Color(0xFFF5D0FE)
-                    )
-
-                    LearningModuleCard(
-                        onClick = {},
-                        title = "LISTENING",
-                        desc = """
-                        Improve your reading
-                        comprehension with texts
-                        tailored for your level
-                        """,
-                        iconText = "読",
-                        iconColor = Color(0xFFA5F3FC)
-                    )
-
-                    LearningModuleCard(
-                        onClick = {},
-                        title = "WRITING",
-                        desc = """
-                        Improve your reading
-                        comprehension with texts
-                        tailored for your level
-                        """,
-                        iconText = "字",
-                        iconColor = Color(0xFFF5D0FE)
-                    )
                 }
             }
         }
