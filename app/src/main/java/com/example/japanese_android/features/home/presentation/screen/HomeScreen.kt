@@ -24,10 +24,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -50,19 +46,13 @@ fun HomeScreen() {
     val scrollState = rememberLazyListState()
     val isScrollUp = calculateScrollDirection(scrollState)
 
-    val showBottomNav by remember {
-        derivedStateOf {
-            scrollState.firstVisibleItemScrollOffset == 0 || isScrollUp
-        }
-    }
-
     val visibleState = remember {
         MutableTransitionState(false).apply { targetState = true }
     }
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFF5F5F5))
+            .background(MaterialTheme.colorScheme.background)
             .statusBarsPadding()
     ) {
         Column {
@@ -144,7 +134,7 @@ fun HomeScreen() {
 
         // BOTTOM NAVBAR
         AnimatedVisibility(
-            visible = showBottomNav,
+            visible = isScrollUp || scrollState.firstVisibleItemScrollOffset == 0,
             enter = slideInVertically(
                 initialOffsetY = { it }
             ) + fadeIn(),
