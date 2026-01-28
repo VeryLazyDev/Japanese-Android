@@ -38,3 +38,7 @@ val Typography = Typography(
 val HorizonFont = FontFamily(
     Font(R.font.horizon, FontWeight.Normal)
 )
+
+val AuxMono = FontFamily(
+    Font(R.font.aux_mono, FontWeight.Bold)
+)

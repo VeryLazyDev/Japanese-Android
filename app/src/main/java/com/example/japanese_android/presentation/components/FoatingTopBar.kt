@@ -1,5 +1,6 @@
 package com.example.japanese_android.presentation.components
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -20,7 +21,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.example.japanese_android.R
+import com.example.japanese_android.common.components.AppLogo
+import com.example.japanese_android.common.components.AppName
 import com.example.japanese_android.ui.theme.HorizonFont
 
 @Composable
@@ -31,7 +36,7 @@ fun FloatingTopBar(
 
     Card(
         modifier = Modifier
-            .padding(horizontal = 16.dp, vertical = 16.dp)
+            .padding(horizontal = 16.dp, vertical = 0.dp)
             .shadow(
                 elevation = 3.dp,
                 shape = cardShape,
@@ -49,6 +54,17 @@ fun FloatingTopBar(
                 .padding(horizontal = 16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
+            // APP LOGO
+            AppLogo()
+            // SPACE
+            Spacer(modifier = Modifier.weight(.1f))
+
+            // APP NAME
+            AppName()
+
+            // SPACE
+            Spacer(modifier = Modifier.weight(1.5f))
+
             // MENU ICON
             IconButton(onClick = onMenuClick) {
                 Icon(
@@ -57,16 +73,6 @@ fun FloatingTopBar(
                 )
             }
 
-            // SPACE
-            Spacer(modifier = Modifier.weight(1f))
-
-            // APP NAME
-            Text(
-                text = title,
-                fontFamily = HorizonFont,
-                style = MaterialTheme.typography.titleMedium,
-                color = Color.Black
-            )
         }
     }
 }
