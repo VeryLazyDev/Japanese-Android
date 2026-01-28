@@ -9,11 +9,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.rounded.Nightlight
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CardElevation
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonColors
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -38,15 +40,14 @@ fun FloatingTopBar(
         modifier = Modifier
             .padding(horizontal = 16.dp, vertical = 0.dp)
             .shadow(
-                elevation = 3.dp,
-                shape = cardShape,
+                elevation = 3.dp, shape = cardShape,
 //                ambientColor = Color.Blue,
                 spotColor = Color.Gray
             )
             .fillMaxWidth(),
         shape = cardShape,
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White)
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
     ) {
         Row(
             modifier = Modifier
@@ -66,10 +67,12 @@ fun FloatingTopBar(
             Spacer(modifier = Modifier.weight(1.5f))
 
             // MENU ICON
-            IconButton(onClick = onMenuClick) {
+            IconButton(
+                onClick = onMenuClick,
+                modifier = Modifier.padding(5.dp),
+            ) {
                 Icon(
-                    imageVector = Icons.Default.Menu,
-                    contentDescription = "HOME_MENU"
+                    imageVector = Icons.Rounded.Nightlight, contentDescription = "HOME_MENU"
                 )
             }
 

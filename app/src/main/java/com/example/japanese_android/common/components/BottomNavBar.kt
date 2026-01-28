@@ -25,6 +25,7 @@ import androidx.compose.material.icons.twotone.Settings
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -47,11 +48,11 @@ fun BottomNavBar(
             shape = RoundedCornerShape(25.dp),
             colors = CardDefaults.cardColors(
                 // The key is a very low alpha white
-                containerColor = Color.White
+                containerColor = MaterialTheme.colorScheme.background
             ),
             elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
             // Border adds the "sharp" glass edge look
-            border = BorderStroke(0.5.dp, Color.White.copy(alpha = 0.8f))
+            border = BorderStroke(0.5.dp, MaterialTheme.colorScheme.background.copy(alpha = 0.8f))
         ) {
             Row(
                 modifier = Modifier.fillMaxSize(),
@@ -61,6 +62,7 @@ fun BottomNavBar(
                 // Example Icons
                 GlassNavItem(Icons.Rounded.AutoAwesomeMosaic, "Home", true)
                 GlassNavItem(Icons.Rounded.Search, "Profile", false)
+//                GlassNavItem(Icons.Rounded., "Profile", false)
                 GlassNavItem(Icons.Rounded.Settings, "Lessons", false)
             }
         }
@@ -73,7 +75,7 @@ fun GlassNavItem(icon: ImageVector, label: String, isSelected: Boolean) {
         Icon(
             imageVector = icon,
             contentDescription = label,
-            tint = if (isSelected) Color.Black else Color.Black.copy(alpha = 0.4f),
+            tint = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.primary.copy(alpha = 0.4f),
             modifier = Modifier
                 .size(30.dp)
         )
