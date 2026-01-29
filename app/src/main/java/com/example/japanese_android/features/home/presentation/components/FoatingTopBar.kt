@@ -36,7 +36,10 @@ import com.example.japanese_android.ui.theme.HorizonFont
 
 @Composable
 fun FloatingTopBar(
-    title: String, isDarkTheme: Boolean, onThemeToggle: () -> Unit
+    title: String,
+    isDarkTheme: Boolean,
+    animateIcon: Boolean = true, // Pass this down
+    onThemeToggle: () -> Unit
 ) {
     val cardShape = RoundedCornerShape(13.dp)
 
@@ -72,7 +75,8 @@ fun FloatingTopBar(
             // THEME TOGGLE ICON
             ThemeToggleButton(
                 isDarkMode = isDarkTheme,
-                onToggle = onThemeToggle
+                onToggle = onThemeToggle,
+                animate = animateIcon
             )
 
         }

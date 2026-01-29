@@ -2,34 +2,34 @@ package com.example.japanese_android.ui.state
 
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 
 @Composable
-fun calculateScrollDirection(
-    listSate: LazyListState
-) : Boolean{
-    var previousIndex by remember { mutableStateOf(0) }
-    var previousOffset by remember { mutableStateOf(0) }
+fun calculateScrollDirection(listState: LazyListState): Boolean {
+    var previousIndex by remember { mutableIntStateOf(listState.firstVisibleItemIndex) }
+    var previousOffset by remember { mutableIntStateOf(listState.firstVisibleItemScrollOffset) }
 
-    val isScrollUp by remember {
+    val isScrollingUp by remember {
         derivedStateOf {
-            val scrollingUp =
-                if (listSate.firstVisibleItemIndex != previousIndex)
-                    listSate.firstVisibleItemIndex < previousIndex
-                else
-                    listSate.firstVisibleItemScrollOffset < previousOffset
+            val currentIndex = listState.firstVisibleItemIndex
+            val currentOffset = listState.firstVisibleItemScrollOffset
 
-            previousIndex = listSate.firstVisibleItemIndex
-            previousOffset = listSate.firstVisibleItemScrollOffset
+            val up = if (currentIndex != previousIndex) {
+                currentIndex < previousIndex
+            } else {
+                currentOffset < previousOffset
+            }
 
-            scrollingUp
+            previousIndex = currentIndex
+            previousOffset = currentOffset
+            up
         }
-
     }
-
-    return isScrollUp
+    return isScrollingUp
 }

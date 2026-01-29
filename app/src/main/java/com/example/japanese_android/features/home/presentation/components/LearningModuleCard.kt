@@ -48,7 +48,7 @@ fun LearningModuleCard(
     onClick: () -> Unit
 ) {
 
-    OutlinedCard (
+    OutlinedCard(
         onClick = onClick,
         modifier = Modifier
             .height(200.dp)

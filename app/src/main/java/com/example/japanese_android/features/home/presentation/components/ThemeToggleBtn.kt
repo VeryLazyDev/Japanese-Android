@@ -17,11 +17,16 @@ import androidx.compose.ui.graphics.graphicsLayer
 @Composable
 fun ThemeToggleButton(
     isDarkMode: Boolean,
-    onToggle: () -> Unit
+    onToggle: () -> Unit,
+    animate: Boolean = true // Added to prevent double animation
 ) {
+    val targetRotation = if (isDarkMode) 180f else 0f
+
     val rotation by animateFloatAsState(
-        targetValue = if (isDarkMode) 180f else 0f,
-        animationSpec = spring(Spring.DampingRatioMediumBouncy), label = "icon_rotate"
+        targetValue = targetRotation,
+        animationSpec = if (animate) spring(Spring.DampingRatioMediumBouncy)
+        else spring(stiffness = 10000f), // Instant if not animating
+        label = "icon_rotate"
     )
 
     IconButton (
