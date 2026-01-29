@@ -26,6 +26,7 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.rounded.AutoAwesomeMosaic
 import androidx.compose.material.icons.rounded.Home
+import androidx.compose.material.icons.rounded.Language
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.material.icons.twotone.Settings
@@ -40,8 +41,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.example.japanese_android.R
 
 @Composable
 fun BottomNavBar(
@@ -73,9 +77,9 @@ fun BottomNavBar(
             ) {
                 // Example Icons
                 GlassNavItem(Icons.Rounded.AutoAwesomeMosaic, "Home", true)
-                GlassNavItem(Icons.Rounded.Search, "Profile", false)
-//                GlassNavItem(Icons.Rounded., "Profile", false)
-                GlassNavItem(Icons.Rounded.Settings, "Lessons", false)
+                GlassNavItemPNG(R.drawable.hiragana_a, "Lan", false)
+                GlassNavItem(Icons.Rounded.Search, "Search", false)
+                GlassNavItem(Icons.Rounded.Settings, "Settings", false)
             }
         }
     }
@@ -105,11 +109,6 @@ fun GlassNavItem(icon: ImageVector, label: String, isSelected: Boolean) {
                     else Color.Transparent,
                     shape = CircleShape
                 ),
-//                .clickable(
-//                    interactionSource = remember { MutableInteractionSource() },
-//                    indication = null, // Removes the default grey ripple if you want it clean
-//                    onClick = { /* Handle Click */ }
-//                ),
             contentAlignment = Alignment.Center
         ) {
             IconButton(onClick = {}) {
@@ -117,47 +116,49 @@ fun GlassNavItem(icon: ImageVector, label: String, isSelected: Boolean) {
                     imageVector = icon,
                     contentDescription = label,
                     tint = if (isSelected) MaterialTheme.colorScheme.primary
-                    else MaterialTheme.colorScheme.primary.copy(alpha = 0.6f),
+                    else MaterialTheme.colorScheme.primary,
                     modifier = Modifier.size(24.dp)
                 )
             }
         }
     }
 }
-//
-//@Composable
-//fun GlassNavItem(icon: ImageVector, label: String, isSelected: Boolean) {
-//    Column(
-//        horizontalAlignment = Alignment.CenterHorizontally,
-//        verticalArrangement = Arrangement.Center,
-//        modifier = Modifier.padding(
-//            vertical = 10.dp
-//        )
-//    ) {
-//        IconButton(
-//            onClick = { },
-//            modifier = Modifier
-//                .height(32.dp)
-//                .width(52.dp)
-//                .clip(CircleShape) // Essential for the Oval look
-//                .background(
-//                    if (isSelected) MaterialTheme.colorScheme.primary.copy(alpha = 0.15f)
-//                    else Color.Transparent
-//                )
-//                .border(
-//                    width = 1.dp, // Must be at least 1.dp to be visible
-//                    color = if (isSelected) MaterialTheme.colorScheme.primary.copy(alpha = 0.3f)
-//                    else Color.Transparent,
-//                    shape = CircleShape // Shape must match the clip
-//                )
-//        ) {
-//            Icon(
-//                imageVector = icon,
-//                contentDescription = label,
-//                tint = if (isSelected) MaterialTheme.colorScheme.primary
-//                else MaterialTheme.colorScheme.primary.copy(alpha = 0.6f),
-//                modifier = Modifier.size(24.dp)
-//            )
-//        }
-//    }
-//}
+
+@Composable
+fun GlassNavItemPNG(iconPhoto: Int, label: String, isSelected: Boolean) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center,
+        // This padding moves the whole "Pill" up and down
+        modifier = Modifier.padding(vertical = 1.dp)
+    ) {
+        Box(
+            modifier = Modifier
+                .height(32.dp)
+                .width(52.dp)
+                .clip(CircleShape) // The Oval shape
+                .background(
+                    if (isSelected) MaterialTheme.colorScheme.primary.copy(alpha = 0.15f)
+                    else Color.Transparent
+                )
+                .border(
+                    width = 1.dp,
+                    color = if (isSelected) MaterialTheme.colorScheme.primary.copy(alpha = 0.3f)
+                    else Color.Transparent,
+                    shape = CircleShape
+                ),
+            contentAlignment = Alignment.Center
+        ) {
+            IconButton(onClick = {}) {
+                Icon(
+                    painter = painterResource(iconPhoto),
+                    contentDescription = label,
+                    tint = if (isSelected) MaterialTheme.colorScheme.primary
+                    else MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.size(24.dp)
+                )
+            }
+        }
+    }
+}
+
