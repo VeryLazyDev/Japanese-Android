@@ -13,11 +13,13 @@ import com.example.japanese_android.ui.theme.HorizonFont
 @Composable
 fun AppName(
     title : String = stringResource(R.string.app_name),
-    style: TextStyle = MaterialTheme.typography.titleMedium
+    style: TextStyle = MaterialTheme.typography.titleMedium,
+    color: Color = MaterialTheme.colorScheme.onSurface
 ){
     Text(
         text = title,
         fontFamily = AuxMono,
         style = style,
+        color = color
     )
 }

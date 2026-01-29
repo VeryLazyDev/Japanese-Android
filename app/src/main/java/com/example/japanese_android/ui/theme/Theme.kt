@@ -1,32 +1,18 @@
 package com.example.japanese_android.ui.theme
-
-import android.app.Activity
-import android.os.Build
-import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.EaseInOut
 import androidx.compose.animation.core.ExperimentalAnimationSpecApi
-import androidx.compose.animation.core.LinearOutSlowInEasing
-import androidx.compose.animation.core.keyframesWithSpline
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
-import androidx.compose.material3.dynamicDarkColorScheme
-import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.unit.dp
 
 private val DarkColorScheme = darkColorScheme(
     primary = DarkPrimary,
     background = DarkBackground,
     surface = DarkSurface,
+    onBackground = Color.White, // Add this
+    onSurface = Color.White,    // Add this
     secondary = PurpleGrey80,
     tertiary = Pink80,
     outline = DarkOutline,
@@ -36,20 +22,39 @@ private val LightColorScheme = lightColorScheme(
     primary = LightPrimary,
     background = LightBackground,
     surface = LightSurface,
+    onBackground = Color(0xFF1C1B1F), // Add this (Dark Grey/Black)
+    onSurface = Color(0xFF1C1B1F),    // Add this
     secondary = PurpleGrey40,
     tertiary = Pink40,
     outline = LightOutline
-
-    /* Other default colors to override
-    background = Color(0xFFFFFBFE),
-    surface = Color(0xFFFFFBFE),
-    onPrimary = Color.White,
-    onSecondary = Color.White,
-    onTertiary = Color.White,
-    onBackground = Color(0xFF1C1B1F),
-    onSurface = Color(0xFF1C1B1F),
-    */
 )
+//private val DarkColorScheme = darkColorScheme(
+//    primary = DarkPrimary,
+//    background = DarkBackground,
+//    surface = DarkSurface,
+//    secondary = PurpleGrey80,
+//    tertiary = Pink80,
+//    outline = DarkOutline,
+//)
+//
+//private val LightColorScheme = lightColorScheme(
+//    primary = LightPrimary,
+//    background = LightBackground,
+//    surface = LightSurface,
+//    secondary = PurpleGrey40,
+//    tertiary = Pink40,
+//    outline = LightOutline
+//
+//    /* Other default colors to override
+//    background = Color(0xFFFFFBFE),
+//    surface = Color(0xFFFFFBFE),
+//    onPrimary = Color.White,
+//    onSecondary = Color.White,
+//    onTertiary = Color.White,
+//    onBackground = Color(0xFF1C1B1F),
+//    onSurface = Color(0xFF1C1B1F),
+//    */
+//)
 
 @OptIn(ExperimentalAnimationSpecApi::class)
 @Composable
@@ -58,59 +63,13 @@ fun JapaneseAndroidTheme(
 //    dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {
-//    val colorScheme = when {
-//        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
-//            val context = LocalContext.current
-//            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
-//        }
-//
-//        darkTheme -> DarkColorScheme
-//        else -> LightColorScheme
-//    }
 
     //for theme switch
     val colorScheme = if (darkTheme) DarkColorScheme else LightColorScheme
 
 
-    val animationBg by animateColorAsState(
-        targetValue = colorScheme.background,
-        animationSpec = keyframesWithSpline {
-            durationMillis = 150
-            Offset(0f, 700f)
-            Offset(500f, 0f)
-//            Offset(0f, 100f)
-        }, label = "bg_anim"
-    )
-    val animationSurface by animateColorAsState(
-        targetValue = colorScheme.surface,
-        animationSpec = keyframesWithSpline {
-            durationMillis = 150
-            Offset(0f, 700f)
-            Offset(500f, 0f)
-//            Offset(0f, 0f)
-//            Offset(500f, 700f)
-//            Offset(0f, 100f)
-        }, label = "bg_anim"
-
-    )
-    val animatedPrimary by animateColorAsState(
-        targetValue = colorScheme.primary,
-        animationSpec = keyframesWithSpline {
-            durationMillis = 3000
-            Offset(0f, 0f)
-            Offset(150f, 200f)
-            Offset(0f, 100f)
-        }, label = "primary_anim"
-    )
-
-    val  animationColorShceme = colorScheme.copy(
-        background = animationBg,
-        surface = animationSurface,
-        primary = animatedPrimary
-    )
-
     MaterialTheme(
-        colorScheme = animationColorShceme,
+        colorScheme = colorScheme,
         typography = Typography,
         content = content
     )
