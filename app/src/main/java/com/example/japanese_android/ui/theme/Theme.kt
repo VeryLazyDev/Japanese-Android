@@ -18,7 +18,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.unit.dp
 
 private val DarkColorScheme = darkColorScheme(
     primary = DarkPrimary,
@@ -68,22 +71,25 @@ fun JapaneseAndroidTheme(
     //for theme switch
     val colorScheme = if (darkTheme) DarkColorScheme else LightColorScheme
 
+
     val animationBg by animateColorAsState(
         targetValue = colorScheme.background,
         animationSpec = keyframesWithSpline {
             durationMillis = 150
-            Offset(0f, 0f)
-            Offset(500f, 700f)
-            Offset(0f, 100f)
+            Offset(0f, 700f)
+            Offset(500f, 0f)
+//            Offset(0f, 100f)
         }, label = "bg_anim"
     )
     val animationSurface by animateColorAsState(
         targetValue = colorScheme.surface,
         animationSpec = keyframesWithSpline {
             durationMillis = 150
-            Offset(0f, 0f)
-            Offset(500f, 700f)
-            Offset(0f, 100f)
+            Offset(0f, 700f)
+            Offset(500f, 0f)
+//            Offset(0f, 0f)
+//            Offset(500f, 700f)
+//            Offset(0f, 100f)
         }, label = "bg_anim"
 
     )
