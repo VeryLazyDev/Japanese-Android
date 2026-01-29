@@ -39,10 +39,13 @@ import com.example.japanese_android.features.home.presentation.components.Floati
 import com.example.japanese_android.features.home.presentation.components.LearningModuleCard
 import com.example.japanese_android.ui.state.calculateScrollDirection
 
-@Preview
+//@Preview
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen() {
+fun HomeScreen(
+    isDarkTheme: Boolean,
+    onThemeToggle: () -> Unit
+) {
     val scrollState = rememberLazyListState()
     val isScrollUp = calculateScrollDirection(scrollState)
 
@@ -56,7 +59,7 @@ fun HomeScreen() {
             .statusBarsPadding()
     ) {
         Column {
-            FloatingTopBar(title = "MUDA-ZERO", onMenuClick = {})
+            FloatingTopBar(title = "MUDA-ZERO", isDarkTheme, onThemeToggle )
             AnimatedVisibility(
                 visibleState = visibleState,
                 enter = fadeIn(animationSpec = tween(0)) +
