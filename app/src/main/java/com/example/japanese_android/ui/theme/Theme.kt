@@ -3,6 +3,10 @@ package com.example.japanese_android.ui.theme
 import android.app.Activity
 import android.os.Build
 import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.EaseInOut
+import androidx.compose.animation.core.ExperimentalAnimationSpecApi
+import androidx.compose.animation.core.LinearOutSlowInEasing
+import androidx.compose.animation.core.keyframesWithSpline
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
@@ -12,6 +16,7 @@ import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 
@@ -43,6 +48,7 @@ private val LightColorScheme = lightColorScheme(
     */
 )
 
+@OptIn(ExperimentalAnimationSpecApi::class)
 @Composable
 fun JapaneseAndroidTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
@@ -64,16 +70,31 @@ fun JapaneseAndroidTheme(
 
     val animationBg by animateColorAsState(
         targetValue = colorScheme.background,
-        animationSpec = tween(durationMillis = 10), label = "bg_anim"
+        animationSpec = keyframesWithSpline {
+            durationMillis = 150
+            Offset(0f, 0f)
+            Offset(500f, 700f)
+            Offset(0f, 100f)
+        }, label = "bg_anim"
     )
     val animationSurface by animateColorAsState(
         targetValue = colorScheme.surface,
-        animationSpec = tween(durationMillis = 10), label = "bg_anim"
+        animationSpec = keyframesWithSpline {
+            durationMillis = 150
+            Offset(0f, 0f)
+            Offset(500f, 700f)
+            Offset(0f, 100f)
+        }, label = "bg_anim"
 
     )
     val animatedPrimary by animateColorAsState(
         targetValue = colorScheme.primary,
-        animationSpec = tween(durationMillis = 10), label = "primary_anim"
+        animationSpec = keyframesWithSpline {
+            durationMillis = 3000
+            Offset(0f, 0f)
+            Offset(150f, 200f)
+            Offset(0f, 100f)
+        }, label = "primary_anim"
     )
 
     val  animationColorShceme = colorScheme.copy(
