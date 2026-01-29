@@ -19,6 +19,10 @@ import androidx.compose.material3.IconButtonColors
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
@@ -32,7 +36,7 @@ import com.example.japanese_android.ui.theme.HorizonFont
 
 @Composable
 fun FloatingTopBar(
-    title: String, onMenuClick: () -> Unit
+    title: String, isDarkTheme: Boolean, onThemeToggle: () -> Unit
 ) {
     val cardShape = RoundedCornerShape(13.dp)
 
@@ -41,7 +45,6 @@ fun FloatingTopBar(
             .padding(horizontal = 16.dp, vertical = 0.dp)
             .shadow(
                 elevation = 3.dp, shape = cardShape,
-//                ambientColor = Color.Blue,
                 spotColor = Color.Gray
             )
             .fillMaxWidth(),
@@ -66,15 +69,11 @@ fun FloatingTopBar(
             // SPACE
             Spacer(modifier = Modifier.weight(1.5f))
 
-            // MENU ICON
-            IconButton(
-                onClick = onMenuClick,
-                modifier = Modifier.padding(5.dp),
-            ) {
-                Icon(
-                    imageVector = Icons.Rounded.Nightlight, contentDescription = "HOME_MENU"
-                )
-            }
+            // THEME TOGGLE ICON
+            ThemeToggleButton(
+                isDarkMode = isDarkTheme,
+                onToggle = onThemeToggle
+            )
 
         }
     }
