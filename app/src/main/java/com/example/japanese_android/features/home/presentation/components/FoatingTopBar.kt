@@ -26,6 +26,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -33,13 +34,15 @@ import com.example.japanese_android.R
 import com.example.japanese_android.common.components.AppLogo
 import com.example.japanese_android.common.components.AppName
 import com.example.japanese_android.ui.theme.HorizonFont
+import kotlin.Boolean
 
 @Composable
 fun FloatingTopBar(
     title: String,
     isDarkTheme: Boolean,
+    isToggleEnabled: Boolean,
     animateIcon: Boolean = true, // Pass this down
-    onThemeToggle: () -> Unit
+    onThemeToggle: (Offset) -> Unit
 ) {
     val cardShape = RoundedCornerShape(13.dp)
 
@@ -76,7 +79,8 @@ fun FloatingTopBar(
             ThemeToggleButton(
                 isDarkMode = isDarkTheme,
                 onToggle = onThemeToggle,
-                animate = animateIcon
+                animate = animateIcon,
+                isToggleEnabled = isToggleEnabled
             )
 
         }

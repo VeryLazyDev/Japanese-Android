@@ -11,6 +11,7 @@ import androidx.compose.animation.scaleIn
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.stopScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
@@ -20,6 +21,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -44,18 +46,28 @@ fun HomeScreen(
     isDarkTheme: Boolean,
     onThemeToggle: () -> Unit
 ) {
+    // to control toggle click
+    var isThemeTransitionRunning by remember { mutableStateOf(false) }
+
+    var previewDarkTheme by remember { mutableStateOf(isDarkTheme) }
+
+
     val baseScrollState = rememberLazyListState()
     val overlayScrollState = rememberLazyListState()
 
     val isScrollUp = calculateScrollDirection(baseScrollState)
 
+    val hasPlayedEntryAnimation = rememberSaveable { mutableStateOf(false) }
     val entryVisibleState = remember {
-        MutableTransitionState(false).apply { targetState = true }
+        MutableTransitionState(hasPlayedEntryAnimation.value).apply {
+            targetState = true
+        }
     }
 
     var revealCenter by remember { mutableStateOf<Offset?>(null) }
     var themeAtStartOfAnimation by remember { mutableStateOf(isDarkTheme) }
 
+    val isAnimatingTheme = revealCenter != null
     val animatedRadius by animateFloatAsState(
         targetValue = if (revealCenter != null) 3000f else 0f,
         animationSpec = tween(800, easing = FastOutSlowInEasing),
@@ -64,9 +76,18 @@ fun HomeScreen(
             if (revealCenter != null) {
                 onThemeToggle()
                 revealCenter = null
+                isThemeTransitionRunning = false
+                // sync icon with real theme
+//                previewDarkTheme = isDarkTheme
             }
         }
     )
+
+    // Stop scroll during animation
+    LaunchedEffect(isAnimatingTheme) {
+        if (isAnimatingTheme) baseScrollState.stopScroll()
+    }
+
 
     Box(modifier = Modifier.fillMaxSize()) {
         // LAYER 1: Base (This layer handles ALL scroll input)
@@ -77,13 +98,18 @@ fun HomeScreen(
                 isScrollUp = isScrollUp,
                 isDark = baseTheme,
                 entryVisibleState = entryVisibleState,
+                iconDarkPreview = previewDarkTheme,
                 onToggleRequest = { offset ->
+                    if (isThemeTransitionRunning) return@HomeContent
                     themeAtStartOfAnimation = isDarkTheme
                     revealCenter = offset
+                    previewDarkTheme = !previewDarkTheme
                 },
+                onEntryShown = { hasPlayedEntryAnimation.value = true },
                 isAnimatingTheme = revealCenter != null
             )
         }
+
 
         // LAYER 2: Overlay (Visual only - No touch input)
         if (revealCenter != null) {
@@ -101,8 +127,10 @@ fun HomeScreen(
                             scrollState = overlayScrollState,
                             isScrollUp = isScrollUp,
                             isDark = !themeAtStartOfAnimation,
+                            iconDarkPreview = previewDarkTheme,
                             entryVisibleState = entryVisibleState,
                             onToggleRequest = {},
+                            onEntryShown = { },
                             isAnimatingTheme = true
                         )
                         // This transparent box catches clicks but lets the Base Layer
@@ -121,11 +149,17 @@ fun HomeContent(
     isScrollUp: Boolean,
     isDark: Boolean,
     entryVisibleState: MutableTransitionState<Boolean>,
+    iconDarkPreview: Boolean,
     onToggleRequest: (Offset) -> Unit,
+    onEntryShown: () -> Unit,
     isAnimatingTheme: Boolean
 ) {
     val textColor = MaterialTheme.colorScheme.onBackground
-
+    LaunchedEffect(entryVisibleState.currentState) {
+        if (entryVisibleState.currentState) {
+            onEntryShown()
+        }
+    }
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -135,9 +169,12 @@ fun HomeContent(
         Column(modifier = Modifier.fillMaxSize()) {
             FloatingTopBar(
                 title = "MUDA-ZERO",
-                isDarkTheme = isDark,
+                isDarkTheme = iconDarkPreview,
                 animateIcon = !isAnimatingTheme,
-                onThemeToggle = { onToggleRequest(Offset(900f, 150f)) }
+                isToggleEnabled = !isAnimatingTheme,
+                onThemeToggle = {
+                    offset -> onToggleRequest(offset)
+                }
             )
 
             LazyColumn(
@@ -149,8 +186,10 @@ fun HomeContent(
                 item {
                     // Only apply slide-in to the header on first load
                     AnimatedVisibility(
-                        visibleState = entryVisibleState,
-                        enter = fadeIn(tween(500)) + slideInVertically(initialOffsetY = { 40 })
+//                        visibleState = entryVisibleState,
+                        visible = entryVisibleState.targetState && !isAnimatingTheme,
+                        enter = fadeIn(tween(500)) + slideInVertically(initialOffsetY = { 40 }),
+                        exit = fadeOut()
                     ) {
                         Column {
                             Spacer(modifier = Modifier.height(30.dp))
