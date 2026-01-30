@@ -1,5 +1,7 @@
 package com.example.japanese_android.navigation
 
+import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -17,7 +19,15 @@ fun AppNavGraph(
         navController = navController,
         startDestination = Routes.Home.route
     ) {
-        composable(Routes.Home.route) {
+        composable(
+            Routes.Home.route,
+            exitTransition = {
+                slideOutOfContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Left,
+                    tween(1000)
+                )
+            }
+        ) {
             HomeScreen(
                 isDarkTheme = isDarkTheme,
                 onThemeToggle = onThemeToggle,
@@ -27,7 +37,9 @@ fun AppNavGraph(
 
         composable(Routes.HIRAGANA.route) {
 //            LanguageScreen()
-            ReadingScreen()
+            ReadingScreen(
+                navController = navController
+            )
         }
 
         composable(Routes.Search.route) {
