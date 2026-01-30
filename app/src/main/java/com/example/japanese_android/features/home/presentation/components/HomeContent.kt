@@ -80,7 +80,6 @@ fun HomeContent(
                 item {
                     // Only apply slide-in to the header on first load
                     AnimatedVisibility(
-//                        visibleState = entryVisibleState,
                         visible = entryVisibleState.targetState && !isAnimatingTheme,
                         enter = fadeIn(tween(500)) + slideInVertically(initialOffsetY = { 40 }),
                         exit = fadeOut()

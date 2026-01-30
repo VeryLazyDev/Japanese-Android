@@ -21,10 +21,16 @@ fun AppNavGraph(
     ) {
         composable(
             Routes.Home.route,
+            enterTransition = {
+                slideIntoContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Right,
+                    tween(1300)
+                )
+            },
             exitTransition = {
                 slideOutOfContainer(
                     AnimatedContentTransitionScope.SlideDirection.Left,
-                    tween(1000)
+                    tween(800)
                 )
             }
         ) {
@@ -35,7 +41,8 @@ fun AppNavGraph(
             )
         }
 
-        composable(Routes.HIRAGANA.route) {
+        composable(
+            Routes.HIRAGANA.route,) {
 //            LanguageScreen()
             ReadingScreen(
                 navController = navController
