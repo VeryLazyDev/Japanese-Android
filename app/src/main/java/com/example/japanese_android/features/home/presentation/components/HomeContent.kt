@@ -29,9 +29,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.example.japanese_android.common.components.AppLogo
 import com.example.japanese_android.common.components.AppName
-import com.example.japanese_android.common.components.BottomNavBar
+import com.example.japanese_android.common.components.bottom_nav.BottomNavBar
 import com.example.japanese_android.common.components.TextHeadLine
 import com.example.japanese_android.features.home.data.model.HomePageModules
 
@@ -44,7 +45,8 @@ fun HomeContent(
     iconDarkPreview: Boolean,
     onToggleRequest: (Offset) -> Unit,
     onEntryShown: () -> Unit,
-    isAnimatingTheme: Boolean
+    isAnimatingTheme: Boolean,
+    navController: NavController
 ) {
     val textColor = MaterialTheme.colorScheme.onBackground
     LaunchedEffect(entryVisibleState.currentState) {
@@ -64,8 +66,8 @@ fun HomeContent(
                 isDarkTheme = iconDarkPreview,
                 animateIcon = !isAnimatingTheme,
                 isToggleEnabled = !isAnimatingTheme,
-                onThemeToggle = {
-                        offset -> onToggleRequest(offset)
+                onThemeToggle = { offset ->
+                    onToggleRequest(offset)
                 }
             )
 
@@ -89,11 +91,17 @@ fun HomeContent(
                                 TextHeadLine("Welcome to ", color = textColor)
                                 AppLogo()
                                 Spacer(modifier = Modifier.weight(.1f))
-                                AppName(style = MaterialTheme.typography.headlineSmall, color = textColor)
+                                AppName(
+                                    style = MaterialTheme.typography.headlineSmall,
+                                    color = textColor
+                                )
                                 Spacer(modifier = Modifier.weight(1f))
                             }
                             Spacer(modifier = Modifier.height(10.dp))
-                            Text("Ready to Start your journey? Pick a module below to master your fluency.", color = textColor)
+                            Text(
+                                "Ready to Start your journey? Pick a module below to master your fluency.",
+                                color = textColor
+                            )
                             Spacer(modifier = Modifier.height(40.dp))
                         }
                     }
@@ -121,11 +129,15 @@ fun HomeContent(
                         )
                     } else {
                         // This only runs on first app entry
-                        val itemVisible = remember { MutableTransitionState(false).apply { targetState = true } }
+                        val itemVisible =
+                            remember { MutableTransitionState(false).apply { targetState = true } }
                         AnimatedVisibility(
                             visibleState = itemVisible,
                             enter = fadeIn(tween(800, delayMillis = 120 * index)) +
-                                    scaleIn(initialScale = 0.95f, animationSpec = tween(800, delayMillis = 140 * index))
+                                    scaleIn(
+                                        initialScale = 0.95f,
+                                        animationSpec = tween(800, delayMillis = 140 * index)
+                                    )
                         ) {
                             LearningModuleCard(
                                 title = module.title,
@@ -149,7 +161,9 @@ fun HomeContent(
             exit = slideOutVertically(targetOffsetY = { it }) + fadeOut(),
             modifier = Modifier.align(Alignment.BottomCenter)
         ) {
-            BottomNavBar()
+            BottomNavBar(
+                navController = navController
+            )
         }
     }
 }

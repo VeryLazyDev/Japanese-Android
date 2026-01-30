@@ -1,42 +1,23 @@
 package com.example.japanese_android.features.home.presentation.screen
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.scaleIn
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.stopScroll
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.unit.dp
-import com.example.japanese_android.common.components.AppLogo
-import com.example.japanese_android.common.components.AppName
-import com.example.japanese_android.common.components.BottomNavBar
-import com.example.japanese_android.common.components.TextHeadLine
-import com.example.japanese_android.features.home.data.model.HomePageModules
-import com.example.japanese_android.features.home.presentation.components.FloatingTopBar
+import androidx.navigation.NavController
 import com.example.japanese_android.features.home.presentation.components.HomeContent
-import com.example.japanese_android.features.home.presentation.components.LearningModuleCard
 import com.example.japanese_android.features.home.utils.CircleClip
 import com.example.japanese_android.ui.state.calculateScrollDirection
 import com.example.japanese_android.ui.theme.JapaneseAndroidTheme
@@ -45,7 +26,8 @@ import com.example.japanese_android.ui.theme.JapaneseAndroidTheme
 @Composable
 fun HomeScreen(
     isDarkTheme: Boolean,
-    onThemeToggle: () -> Unit
+    onThemeToggle: () -> Unit,
+    navController: NavController
 ) {
     // to control toggle click
     var isThemeTransitionRunning by remember { mutableStateOf(false) }
@@ -107,7 +89,8 @@ fun HomeScreen(
                     previewDarkTheme = !previewDarkTheme
                 },
                 onEntryShown = { hasPlayedEntryAnimation.value = true },
-                isAnimatingTheme = revealCenter != null
+                isAnimatingTheme = revealCenter != null,
+                navController = navController
             )
         }
 
@@ -132,7 +115,8 @@ fun HomeScreen(
                             entryVisibleState = entryVisibleState,
                             onToggleRequest = {},
                             onEntryShown = { },
-                            isAnimatingTheme = true
+                            isAnimatingTheme = true,
+                            navController = navController
                         )
                         // This transparent box catches clicks but lets the Base Layer
                         // underneath handle the actual scrolling logic
