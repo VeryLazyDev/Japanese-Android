@@ -19,7 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.example.japanese_android.common.data.model.bottomNavItems
+import com.example.japanese_android.common.data.bottomNavItems
 
 @Composable
 fun BottomNavBar(
