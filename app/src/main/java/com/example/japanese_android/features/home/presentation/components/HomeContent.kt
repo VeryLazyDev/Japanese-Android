@@ -13,10 +13,14 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.absolutePadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -124,7 +128,15 @@ fun HomeContent(
                             desc = module.desc,
                             iconText = module.icon,
                             iconColor = module.color,
-                            onClick = {}
+                            onClick = {
+                                navController.navigate(module.route){
+                                    popUpTo(navController.graph.startDestinationId) {
+                                        saveState = true
+                                    }
+                                    launchSingleTop = true
+                                    restoreState = true
+                                }
+                            }
                         )
                     } else {
                         // This only runs on first app entry
@@ -143,7 +155,15 @@ fun HomeContent(
                                 desc = module.desc,
                                 iconText = module.icon,
                                 iconColor = module.color,
-                                onClick = {}
+                                onClick = {
+                                    navController.navigate(module.route){
+                                        popUpTo(navController.graph.startDestinationId) {
+                                            saveState = true
+                                        }
+                                        launchSingleTop = true
+                                        restoreState = true
+                                    }
+                                }
                             )
                         }
                     }
@@ -158,7 +178,7 @@ fun HomeContent(
             visible = (isScrollUp || scrollState.firstVisibleItemScrollOffset == 0) && !isAnimatingTheme,
             enter = slideInVertically(initialOffsetY = { it }) + fadeIn(),
             exit = slideOutVertically(targetOffsetY = { it }) + fadeOut(),
-            modifier = Modifier.align(Alignment.BottomCenter)
+            modifier = Modifier.align(Alignment.BottomCenter).windowInsetsPadding(WindowInsets.safeDrawing)
         ) {
             BottomNavBar(
                 navController = navController
