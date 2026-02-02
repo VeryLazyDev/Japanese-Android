@@ -1,92 +1,87 @@
-package com.example.japanese_android.features.home.presentation.screen
-
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.stopScroll
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.geometry.Rect
+import androidx.compose.ui.graphics.Outline
+import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.unit.Density
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.navigation.NavController
 import com.example.japanese_android.features.home.presentation.components.HomeContent
-import com.example.japanese_android.features.home.utils.CircleClip
 import com.example.japanese_android.ui.state.calculateScrollDirection
 import com.example.japanese_android.ui.theme.JapaneseAndroidTheme
 
-@OptIn(ExperimentalMaterial3Api::class)
+// 1. The Clip Shape Logic
+class CircleClip(private val center: Offset, private val radius: Float) : Shape {
+    override fun createOutline(
+        size: androidx.compose.ui.geometry.Size,
+        layoutDirection: LayoutDirection,
+        density: Density
+    ): Outline {
+        val path = Path().apply {
+            addOval(Rect(center, radius))
+        }
+        return Outline.Generic(path)
+    }
+}
+
 @Composable
 fun HomeScreen(
     isDarkTheme: Boolean,
     onThemeToggle: () -> Unit,
     navController: NavController
 ) {
-    // to control toggle click
-    var isThemeTransitionRunning by remember { mutableStateOf(false) }
+    // Stores where the user tapped
+    var revealCenter by remember { mutableStateOf<Offset?>(null) }
 
-    var previewDarkTheme by remember { mutableStateOf(isDarkTheme) }
-
+    // This controls the radius animation
+    // 3000f is usually enough to cover any phone screen size
+    val animatedRadius by animateFloatAsState(
+        targetValue = if (revealCenter != null) 3000f else 0f,
+        animationSpec = tween(durationMillis = 700, easing = FastOutSlowInEasing),
+        finishedListener = {
+            if (revealCenter != null) {
+                // IMPORTANT: Only toggle the real global theme when animation finishes
+                onThemeToggle()
+                revealCenter = null
+            }
+        },
+        label = "RevealAnimation"
+    )
 
     val baseScrollState = rememberLazyListState()
     val overlayScrollState = rememberLazyListState()
-
     val isScrollUp = calculateScrollDirection(baseScrollState)
 
     val hasPlayedEntryAnimation = rememberSaveable { mutableStateOf(false) }
     val entryVisibleState = remember {
-        MutableTransitionState(hasPlayedEntryAnimation.value).apply {
-            targetState = true
-        }
+        MutableTransitionState(hasPlayedEntryAnimation.value)
+            .apply { targetState = true }
     }
-
-    var revealCenter by remember { mutableStateOf<Offset?>(null) }
-    var themeAtStartOfAnimation by remember { mutableStateOf(isDarkTheme) }
-
-    val isAnimatingTheme = revealCenter != null
-    val animatedRadius by animateFloatAsState(
-        targetValue = if (revealCenter != null) 3000f else 0f,
-        animationSpec = tween(800, easing = FastOutSlowInEasing),
-        label = "reveal radius",
-        finishedListener = {
-            if (revealCenter != null) {
-                onThemeToggle()
-                revealCenter = null
-                isThemeTransitionRunning = false
-                // sync icon with real theme
-//                previewDarkTheme = isDarkTheme
-            }
-        }
-    )
-
-    // Stop scroll during animation
-    LaunchedEffect(isAnimatingTheme) {
-        if (isAnimatingTheme) baseScrollState.stopScroll()
-    }
-
 
     Box(modifier = Modifier.fillMaxSize()) {
-        // LAYER 1: Base (This layer handles ALL scroll input)
-        val baseTheme = if (revealCenter != null) themeAtStartOfAnimation else isDarkTheme
-        JapaneseAndroidTheme(darkTheme = baseTheme) {
+
+        // 🔹 BASE LAYER: Shows the CURRENT global theme
+        JapaneseAndroidTheme(darkTheme = isDarkTheme) {
             HomeContent(
                 scrollState = baseScrollState,
                 isScrollUp = isScrollUp,
-                isDark = baseTheme,
+                isDark = isDarkTheme,
                 entryVisibleState = entryVisibleState,
-                iconDarkPreview = previewDarkTheme,
+                iconDarkPreview = isDarkTheme,
                 onToggleRequest = { offset ->
-                    if (isThemeTransitionRunning) return@HomeContent
-                    themeAtStartOfAnimation = isDarkTheme
+                    // Trigger the animation by setting the center point
                     revealCenter = offset
-                    previewDarkTheme = !previewDarkTheme
                 },
                 onEntryShown = { hasPlayedEntryAnimation.value = true },
                 isAnimatingTheme = revealCenter != null,
@@ -94,34 +89,25 @@ fun HomeScreen(
             )
         }
 
-
-        // LAYER 2: Overlay (Visual only - No touch input)
+        // 🔹 OVERLAY LAYER: Shows the NEXT theme (Inverse of current)
         if (revealCenter != null) {
-            JapaneseAndroidTheme(darkTheme = !themeAtStartOfAnimation) {
+            JapaneseAndroidTheme(darkTheme = !isDarkTheme) {
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
                         .clip(CircleClip(revealCenter!!, animatedRadius))
-                        // CRITICAL: This prevents the overlay from stealing scroll focus
-                        .graphicsLayer{ alpha = 0.99f }
                 ) {
-                    // We render the content but we disable interaction
-                    Box(modifier = Modifier.fillMaxSize()) {
-                        HomeContent(
-                            scrollState = overlayScrollState,
-                            isScrollUp = isScrollUp,
-                            isDark = !themeAtStartOfAnimation,
-                            iconDarkPreview = previewDarkTheme,
-                            entryVisibleState = entryVisibleState,
-                            onToggleRequest = {},
-                            onEntryShown = { },
-                            isAnimatingTheme = true,
-                            navController = navController
-                        )
-                        // This transparent box catches clicks but lets the Base Layer
-                        // underneath handle the actual scrolling logic
-                        Box(modifier = Modifier.fillMaxSize().background(Color.Transparent))
-                    }
+                    HomeContent(
+                        scrollState = overlayScrollState,
+                        isScrollUp = isScrollUp,
+                        isDark = !isDarkTheme,
+                        iconDarkPreview = !isDarkTheme,
+                        entryVisibleState = entryVisibleState,
+                        onToggleRequest = {}, // Disable clicks on the overlay
+                        onEntryShown = {},
+                        isAnimatingTheme = true,
+                        navController = navController
+                    )
                 }
             }
         }

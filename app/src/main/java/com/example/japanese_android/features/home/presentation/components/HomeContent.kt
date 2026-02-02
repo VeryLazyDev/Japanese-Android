@@ -140,16 +140,16 @@ fun HomeContent(
                         )
                     } else {
                         // This only runs on first app entry
-                        val itemVisible =
-                            remember { MutableTransitionState(false).apply { targetState = true } }
-                        AnimatedVisibility(
-                            visibleState = itemVisible,
-                            enter = fadeIn(tween(800, delayMillis = 120 * index)) +
-                                    scaleIn(
-                                        initialScale = 0.95f,
-                                        animationSpec = tween(800, delayMillis = 140 * index)
-                                    )
-                        ) {
+//                        val itemVisible =
+//                            remember { MutableTransitionState(false).apply { targetState = true } }
+//                        AnimatedVisibility(
+//                            visibleState = itemVisible,
+//                            enter = fadeIn(tween(800, delayMillis = 120 * index)) +
+//                                    scaleIn(
+//                                        initialScale = 0.95f,
+//                                        animationSpec = tween(800, delayMillis = 140 * index)
+//                                    )
+//                        ) {
                             LearningModuleCard(
                                 title = module.title,
                                 desc = module.desc,
@@ -165,7 +165,7 @@ fun HomeContent(
                                     }
                                 }
                             )
-                        }
+//                        }
                     }
                     Spacer(modifier = Modifier.height(16.dp))
                 }
