@@ -9,6 +9,7 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -79,6 +80,7 @@ fun ReadingScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
+                .scrollable(scrollState, orientation = Orientation.Vertical)
                 .padding(horizontal = 15.dp)
         ) {
             val itemVisible =
