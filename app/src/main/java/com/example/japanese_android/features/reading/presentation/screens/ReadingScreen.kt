@@ -1,48 +1,66 @@
 package com.example.japanese_android.features.reading.presentation.screens
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.EaseInOut
 import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
-import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
+import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.safeContentPadding
-import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.scrollableArea
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ChevronLeft
+import androidx.compose.material.icons.rounded.Clear
+import androidx.compose.material.icons.rounded.Menu
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.japanese_android.common.components.TextHeadLine
-import com.example.japanese_android.common.components.bottom_nav.BottomNavBar
-import kotlinx.coroutines.delay
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ReadingScreen(
     navController: NavController
 ) {
+    var showBottomSheet by remember { mutableStateOf(true) }
+    val sheetState = rememberModalBottomSheetState()
+    val scrollState = rememberScrollState()
+
     Box(
         modifier = Modifier
             .statusBarsPadding()
-//            .safeContentPadding()
             .fillMaxSize()
     ) {
         Column(
@@ -60,23 +78,129 @@ fun ReadingScreen(
                             animationSpec = tween(700)
                         )
             ) {
-                TextHeadLine("Learning Modules")
+                Row(
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    IconButton(onClick = {}) {
+                        Icon(
+                            Icons.Default.ChevronLeft,
+                            contentDescription = "back icon"
+                        )
+                    }
+                    TextHeadLine("Reading Modules")
+                    Spacer(modifier = Modifier.weight(1f))
+                    // show bottom sheet
+                    IconButton(onClick = {
+                        showBottomSheet = !showBottomSheet
+                    }) {
+                        Icon(
+                            if (showBottomSheet) Icons.Rounded.Clear else Icons.Rounded.Menu,
+                            contentDescription = "back icon"
+                        )
+                    }
+                }
             }
 
-        Spacer(modifier = Modifier.weight(1f))
+            Spacer(modifier = Modifier.weight(1f))
+            if (showBottomSheet) {
+                ModalBottomSheet(
+                    onDismissRequest = {
+                        showBottomSheet = false
+                    },
+                    sheetState = sheetState
+                ) {
+                    Box(modifier = Modifier.fillMaxWidth().height(300.dp)) {
+                        StableWheelPicker()
+                    }
+
+//                    japaneseLevelDataList.forEach { level ->
+//                        Card(
+//                            modifier = Modifier
+//                                .height(60.dp)
+//                                .fillMaxWidth()
+//                                .padding(vertical = 5.dp, horizontal = 15.dp)
+//                                .background(MaterialTheme.colorScheme.surface),
+//                        ) {
+//                            Box (
+//                                modifier = Modifier.fillMaxSize(),
+//                                contentAlignment = Alignment.Center
+//                            ){
+//                                Row(
+//                                    verticalAlignment = Alignment.CenterVertically,
+//                                    horizontalArrangement = Arrangement.Center
+//                                ) {
+//                                    Text(
+//                                        level.level.toString(),
+//                                        textAlign = TextAlign.Center,
+//                                        fontSize = 18.sp,
+//                                        fontFamily = AuxMono,
+//                                        fontWeight = FontWeight.Bold
+//                                    )
+//                                }
+//                            }
+//                        }
+//                    }
+                }
+            }
         }
-        AnimatedVisibility(
-            visible = true,
-            enter = slideInVertically(initialOffsetY = { it }) + fadeIn(),
-            exit = slideOutVertically(targetOffsetY = { it }) + fadeOut(),
+
+    }
+}
+
+@Composable
+fun StableWheelPicker() {
+    val listState = rememberLazyListState()
+    val items = (1..50).toList()
+
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        LazyColumn(
+            state = listState,
             modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .fillMaxWidth()
-                .windowInsetsPadding(WindowInsets.safeDrawing)
+                .size(width = 200.dp, height = 250.dp)
+                .background(Color.Gray.copy(alpha = 0.1f), RoundedCornerShape(8.dp)),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            BottomNavBar(
-                navController = navController
-            )
+            itemsIndexed(items) { index, item ->
+                val scale by remember {
+                    derivedStateOf {
+                        val layoutInfo = listState.layoutInfo
+                        val visibleItemsInfo = layoutInfo.visibleItemsInfo
+                        val itemInfo = visibleItemsInfo.find { it.index == index }
+
+                        if (itemInfo != null) {
+                            // Calculate center of the viewport
+                            val viewportCenter = layoutInfo.viewportEndOffset / 2f
+                            // Calculate center of the item
+                            val itemCenter = itemInfo.offset + (itemInfo.size / 2f)
+                            // Calculate distance from center (normalized 0.0 to 1.0)
+                            val distanceFromCenter = Math.abs(viewportCenter - itemCenter)
+                            val normalizedDistance =
+                                (distanceFromCenter / viewportCenter).coerceIn(0f, 1f)
+
+                            1f - (normalizedDistance * 0.5f) // Scale factor
+                        } else {
+                            0.5f // Default scale for non-visible items
+                        }
+                    }
+                }
+
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(50.dp)
+                        .graphicsLayer {
+                            scaleX = scale
+                            scaleY = scale
+                            alpha = scale // Fade out as it scales down
+                        },
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(text = "Item $item", style = MaterialTheme.typography.headlineSmall)
+                }
+            }
         }
     }
 }
