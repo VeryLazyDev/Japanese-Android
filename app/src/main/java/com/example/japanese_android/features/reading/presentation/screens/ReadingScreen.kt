@@ -27,6 +27,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.scrollableArea
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Book
 import androidx.compose.material.icons.filled.ChevronLeft
@@ -80,7 +81,7 @@ fun ReadingScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .scrollable(scrollState, orientation = Orientation.Vertical)
+                .verticalScroll(scrollState)
                 .padding(horizontal = 15.dp)
         ) {
             val itemVisible =

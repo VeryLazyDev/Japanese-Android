@@ -1,5 +1,6 @@
 package com.example.japanese_android.navigation
 
+import HomeScreen
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
@@ -7,7 +8,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.japanese_android.features.hiragana.presentation.screens.HiraganaScreen
-import com.example.japanese_android.features.home.presentation.screen.HomeScreen
 import com.example.japanese_android.features.reading.presentation.screens.ReadingScreen
 import com.example.japanese_android.features.search.presentation.screen.SearchScreen
 import com.example.japanese_android.features.setting.presentation.screen.SettingScreen
