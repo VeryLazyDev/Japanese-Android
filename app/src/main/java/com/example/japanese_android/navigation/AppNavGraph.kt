@@ -2,12 +2,16 @@ package com.example.japanese_android.navigation
 
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.example.japanese_android.features.hiragana.presentation.screens.HiraganaScreen
 import com.example.japanese_android.features.home.presentation.screen.HomeScreen
 import com.example.japanese_android.features.reading.presentation.screens.ReadingScreen
+import com.example.japanese_android.features.search.presentation.screen.SearchScreen
+import com.example.japanese_android.features.setting.presentation.screen.SettingScreen
 
 @Composable
 fun AppNavGraph(
@@ -24,13 +28,13 @@ fun AppNavGraph(
             enterTransition = {
                 slideIntoContainer(
                     AnimatedContentTransitionScope.SlideDirection.Right,
-                    tween(1300)
+                    tween(1000),
                 )
             },
             exitTransition = {
                 slideOutOfContainer(
                     AnimatedContentTransitionScope.SlideDirection.Left,
-                    tween(800)
+                    tween(600)
                 )
             }
         ) {
@@ -42,19 +46,28 @@ fun AppNavGraph(
         }
 
         composable(
-            Routes.HIRAGANA.route,) {
-//            LanguageScreen()
-            ReadingScreen(
+            Routes.HIRAGANA.route,
+        ) {
+            HiraganaScreen(
                 navController = navController
             )
         }
 
         composable(Routes.Search.route) {
-//            SearchScreen()
+            SearchScreen(
+                navController = navController
+            )
         }
 
         composable(Routes.Settings.route) {
-//            SettingsScreen()
+            SettingScreen(navController = navController)
+        }
+
+        // home page modules
+        composable(
+            Routes.Reading.route
+        ) {
+            ReadingScreen(navController = navController)
         }
     }
 }

@@ -13,7 +13,7 @@ val bottomNavItems = listOf(
     BottomNavItem(
         route = Routes.Home.route,
         label = "Home",
-        icon = NavIcon.Vector(Icons.Rounded.AutoAwesomeMosaic)
+        icon = NavIcon.Vector(Icons.Rounded.AutoAwesomeMosaic),
     ),
     BottomNavItem(
         route = Routes.HIRAGANA.route,
