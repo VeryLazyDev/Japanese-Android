@@ -2,7 +2,6 @@ package com.example.japanese_android.navigation
 
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -15,29 +14,21 @@ import com.example.japanese_android.features.setting.presentation.screen.Setting
 
 @Composable
 fun AppNavGraph(
-    navController: NavHostController,
-    isDarkTheme: Boolean,
-    onThemeToggle: () -> Unit
+    navController: NavHostController, isDarkTheme: Boolean, onThemeToggle: () -> Unit
 ) {
     NavHost(
-        navController = navController,
-        startDestination = Routes.Home.route
+        navController = navController, startDestination = Routes.Home.route
     ) {
-        composable(
-            Routes.Home.route,
-            enterTransition = {
-                slideIntoContainer(
-                    AnimatedContentTransitionScope.SlideDirection.Right,
-                    tween(1000),
-                )
-            },
-            exitTransition = {
-                slideOutOfContainer(
-                    AnimatedContentTransitionScope.SlideDirection.Left,
-                    tween(600)
-                )
-            }
-        ) {
+        composable(Routes.Home.route, enterTransition = {
+            slideIntoContainer(
+                AnimatedContentTransitionScope.SlideDirection.Right,
+                tween(1000),
+            )
+        }, exitTransition = {
+            slideOutOfContainer(
+                AnimatedContentTransitionScope.SlideDirection.Left, tween(600)
+            )
+        }) {
             HomeScreen(
                 isDarkTheme = isDarkTheme,
                 onThemeToggle = onThemeToggle,
@@ -67,7 +58,7 @@ fun AppNavGraph(
         composable(
             Routes.Reading.route
         ) {
-            ReadingScreen(navController = navController)
+            ReadingScreen(navController = navController, isDarkTheme = isDarkTheme)
         }
     }
 }
