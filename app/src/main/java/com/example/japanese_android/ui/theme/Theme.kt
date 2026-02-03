@@ -13,7 +13,7 @@ private val DarkColorScheme = darkColorScheme(
     surface = DarkSurface,
     onBackground = Color.White, // Add this
     onSurface = Color.White,    // Add this
-    secondary = PurpleGrey80,
+    secondary = logoColor,
     tertiary = Pink80,
     outline = DarkOutline,
 )
@@ -24,7 +24,7 @@ private val LightColorScheme = lightColorScheme(
     surface = LightSurface,
     onBackground = Color(0xFF1C1B1F), // Add this (Dark Grey/Black)
     onSurface = Color(0xFF1C1B1F),    // Add this
-    secondary = PurpleGrey40,
+    secondary = logoColor,
     tertiary = Pink40,
     outline = LightOutline
 )

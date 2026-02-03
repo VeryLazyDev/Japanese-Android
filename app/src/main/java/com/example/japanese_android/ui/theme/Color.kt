@@ -2,6 +2,8 @@ package com.example.japanese_android.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
+val  logoColor = Color(0xFFA5F3FC)//Color(0xFFdd89ca);
+
 val Purple80 = Color(0xFFD0BCFF)
 val PurpleGrey80 = Color(0xFFCCC2DC)
 //val Pink80 = Color(0xFFEFB8C8)
