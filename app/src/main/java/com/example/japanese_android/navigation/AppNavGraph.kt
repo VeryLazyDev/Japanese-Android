@@ -22,11 +22,11 @@ fun AppNavGraph(
         composable(Routes.Home.route, enterTransition = {
             slideIntoContainer(
                 AnimatedContentTransitionScope.SlideDirection.Right,
-                tween(1000),
+                tween(500),
             )
         }, exitTransition = {
             slideOutOfContainer(
-                AnimatedContentTransitionScope.SlideDirection.Left, tween(600)
+                AnimatedContentTransitionScope.SlideDirection.Left, tween(400)
             )
         }) {
             HomeScreen(
