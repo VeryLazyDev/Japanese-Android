@@ -147,7 +147,7 @@ fun FabMenu(modifier: Modifier = Modifier) {
                     }
                     expanded = false
                 }, // Closes when tapping outside!
-                offset = IntOffset(-60, -180),
+                offset = IntOffset(-60, -170),
                 properties = PopupProperties(
                     focusable = true // Ensures it captures the back button and clicks
                 )

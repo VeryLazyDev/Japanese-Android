@@ -22,7 +22,7 @@ fun AppNavGraph(
         composable(Routes.Home.route, enterTransition = {
             slideIntoContainer(
                 AnimatedContentTransitionScope.SlideDirection.Right,
-                tween(500),
+                tween(1000),
             )
         }, exitTransition = {
             slideOutOfContainer(
@@ -56,7 +56,12 @@ fun AppNavGraph(
 
         // home page modules
         composable(
-            Routes.Reading.route
+            Routes.Reading.route, enterTransition = {
+                slideIntoContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Left,
+                    tween(700),
+                )
+            }
         ) {
             ReadingScreen(navController = navController, isDarkTheme = isDarkTheme)
         }
