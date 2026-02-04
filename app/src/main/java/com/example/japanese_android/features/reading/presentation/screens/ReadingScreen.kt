@@ -101,11 +101,11 @@ fun ReadingScreen(
             ) {
                 val itemVisible =
                     remember { MutableTransitionState(false).apply { targetState = true } }
-                AnimatedVisibility(
-                    visibleState = itemVisible, enter = fadeIn(tween(800)) + scaleIn(
-                        initialScale = 0.8f, animationSpec = tween(700)
-                    )
-                ) {
+//                AnimatedVisibility(
+//                    visibleState = itemVisible, enter = fadeIn(tween(800)) + scaleIn(
+//                        initialScale = 0.8f, animationSpec = tween(700)
+//                    )
+//                ) {
                     Row(
                         modifier = Modifier.height(70.dp),
                         verticalAlignment = Alignment.CenterVertically
@@ -129,7 +129,7 @@ fun ReadingScreen(
                             )
                         }
                     }
-                }
+//                }
 
                 Spacer(modifier = Modifier.height(20.dp))
                 var isCardVisible by remember { mutableStateOf(false) }
@@ -139,14 +139,14 @@ fun ReadingScreen(
                 }
                 // body section
                 // jlpt reading card
-                AnimatedVisibility(
-                    visible = isCardVisible,
-                    enter = slideInVertically(
-                        initialOffsetY = { it }, // 'it' represents the full height of the card itself
-                        animationSpec = tween(durationMillis = 600)
-                    ) + fadeIn(animationSpec = tween(600)),
-                    exit = fadeOut(),
-                ) {
+//                AnimatedVisibility(
+//                    visible = isCardVisible,
+//                    enter = slideInVertically(
+//                        initialOffsetY = { it }, // 'it' represents the full height of the card itself
+//                        animationSpec = tween(durationMillis = 600)
+//                    ) + fadeIn(animationSpec = tween(600)),
+//                    exit = fadeOut(),
+//                ) {
                     OutlinedCard(
                         onClick = {},
                         modifier = Modifier
@@ -195,17 +195,17 @@ fun ReadingScreen(
                             }
                         }
                     }
-                }
+//                }
                 // quiz card
 
-                AnimatedVisibility(
-                    visible = isCardVisible,
-                    enter = slideInVertically(
-                        initialOffsetY = { it }, // 'it' represents the full height of the card itself
-                        animationSpec = tween(durationMillis = 600,delayMillis = 150)
-                    ) + fadeIn(animationSpec = tween(600)),
-                    exit = fadeOut(),
-                ) {
+//                AnimatedVisibility(
+//                    visible = isCardVisible,
+//                    enter = slideInVertically(
+//                        initialOffsetY = { it }, // 'it' represents the full height of the card itself
+//                        animationSpec = tween(durationMillis = 600,delayMillis = 150)
+//                    ) + fadeIn(animationSpec = tween(600)),
+//                    exit = fadeOut(),
+//                ) {
                     OutlinedCard(
                         onClick = {},
                         modifier = Modifier
@@ -254,7 +254,7 @@ fun ReadingScreen(
                             }
                         }
                     }
-                }
+//                }
 
                 if (showBottomSheet) {
                     ModalBottomSheet(
